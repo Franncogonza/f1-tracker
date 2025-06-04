@@ -12,12 +12,12 @@ export class F1ApiService {
   }
 
   getDrivers(year: number): Observable<any> {
-  return this.http.get(`${this.baseUrl}/${year}/drivers`);
-}
+    return this.http.get(`${this.baseUrl}/${year}/drivers`);
+  }
 
-searchDrivers(query: string): Observable<any> {
-  return this.http.get(`${this.baseUrl}/drivers/search?q=${encodeURIComponent(query)}`);
-}
+  searchDrivers(query: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/drivers/search?q=${encodeURIComponent(query)}`);
+  }
 
 
 
