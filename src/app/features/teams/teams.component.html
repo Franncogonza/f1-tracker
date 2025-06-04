@@ -1,1 +1,64 @@
-<p>teams works!</p>
+<nz-spin [nzSpinning]="loading">
+
+<div class="year-selector" style="margin-bottom: 16px;">
+<label for="yearSelect">Año:</label>
+<nz-select
+  id="yearSelect"
+  [(ngModel)]="selectedYear"
+  (ngModelChange)="onYearChange()"
+  style="width: 120px; margin-left: 8px;"
+>
+  <nz-option *ngFor="let year of availableYears" [nzValue]="year" [nzLabel]="year"></nz-option>
+</nz-select>
+
+</div>
+
+  <ng-container *ngIf="!errorMessage">
+
+  <div class="team-grid">
+  <nz-card
+  *ngFor="let team of teams"
+  [nzTitle]="team.teamName"
+  class="team-card"
+  (click)="selectTeam(team)"
+  (keydown)="selectTeam(team)"
+>
+  <p><strong>Nacionalidad:</strong> {{ team.teamNationality }}</p>
+  <p><strong>Año de debut:</strong> {{ team.firstAppeareance }}</p>
+  <p><strong>Campeonatos de Constructores:</strong> {{ team.constructorsChampionships ?? '0' }}</p>
+  <p><strong>Campeonatos de Pilotos:</strong> {{ team.driversChampionships ?? '0' }}</p>
+  <p>
+    <a [href]="team.url" target="_blank" rel="noopener noreferrer">
+      Ver en Wikipedia
+    </a>
+  </p>
+</nz-card>
+
+  </div>
+</ng-container>
+
+  <div *ngIf="selectedTeam" class="drivers-section">
+<h3>Pilotos de {{ selectedTeam.teamName }} en {{ selectedYear }}</h3>
+  <p *ngIf="loading">Cargando pilotos...</p>
+  <p *ngIf="!loading && teamDrivers.length === 0">No se encontraron pilotos para este equipo en el año seleccionado.</p>
+  <ul *ngIf="teamDrivers.length > 0; else noDrivers">
+    <li *ngFor="let driver of teamDrivers">
+      {{ driver.name }} {{ driver.surname }} -
+      <a [href]="driver.url" target="_blank" rel="noopener noreferrer">Wikipedia</a>
+    </li>
+  </ul>
+
+  <ng-template #noDrivers>
+    <p>No se encontraron pilotos para este equipo.</p>
+  </ng-template>
+</div>
+
+
+<nz-alert
+  *ngIf="!loading && errorMessage"
+  [nzType]="'info'"
+  [nzMessage]="errorMessage"
+  nzShowIcon
+  style="margin-bottom: 16px;"
+></nz-alert>
+</nz-spin>

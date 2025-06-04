@@ -1,0 +1,17 @@
+.drivers-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-start;
+  margin-top: 16px;
+}
+
+.driver-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out;
+}
+
+.driver-card:hover {
+  transform: translateY(-4px);
+}
