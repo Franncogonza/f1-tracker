@@ -26,4 +26,17 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/standings/standings.component').then((m) => m.StandingsComponent),
   },
+  {
+  path: 'teams',
+  loadComponent: () =>
+    import('./pages/teams/teams.component').then((m) => m.TeamsComponent),
+},
+{
+  path: 'teams/:teamId/drivers/:year',
+  loadComponent: () =>
+    import('./pages/team-drivers/team-drivers.component').then(m => m.TeamDriversComponent),
+}
+
+
+
 ];

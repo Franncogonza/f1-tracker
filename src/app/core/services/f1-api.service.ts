@@ -7,28 +7,27 @@ export class F1ApiService {
   private readonly baseUrl = 'https://f1api.dev/api';
   private readonly http = inject(HttpClient);
 
-  getConstructors(year: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${year}/constructors`);
+  getTeams(year: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${year}/teams`);
   }
 
   getDrivers(year: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/${year}/drivers`);
   }
 
-  getDriversByConstructor(year: number, constructorId: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${year}/constructors/${constructorId}/drivers`);
+  getDriversByTeam(year: number, teamId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${year}/teams/${teamId}/drivers`);
   }
 
-  searchDrivers(year: number, query: string): Observable<any> {
-    const encoded = encodeURIComponent(query);
-    return this.http.get(`${this.baseUrl}/${year}/drivers/search?q=${encoded}`);
+  searchDrivers(query: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/drivers/search?q=${encodeURIComponent(query)}`);
   }
 
   getDriverStandings(year: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/${year}/drivers/standings`);
   }
 
-  getConstructorStandings(year: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${year}/constructors/standings`);
+  getTeamStandings(year: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${year}/teams/standings`);
   }
 }
