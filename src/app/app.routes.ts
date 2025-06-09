@@ -1,6 +1,29 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/welcome' },
-  { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.routes').then(m => m.WELCOME_ROUTES) }
+  {
+    path: '',
+    redirectTo: 'welcome',
+    pathMatch: 'full',
+  },
+  {
+    path: 'welcome',
+    loadComponent: () =>
+      import('./pages/welcome/welcome.component').then((m) => m.WelcomeComponent),
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+  },
+  {
+    path: 'pilots-search',
+    loadComponent: () =>
+      import('./pages/pilots-search/pilots-search.component').then((m) => m.PilotsSearchComponent),
+  },
+  {
+    path: 'standings',
+    loadComponent: () =>
+      import('./pages/standings/standings.component').then((m) => m.StandingsComponent),
+  },
 ];
