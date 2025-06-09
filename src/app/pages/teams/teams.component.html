@@ -3,71 +3,38 @@
   <!-- Selector de año -->
   <div class="year-selector" style="margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
     <label for="yearSelect" style="margin: 0;">Año:</label>
-    <nz-select
-      id="yearSelect"
-      [(ngModel)]="selectedYear"
-      (ngModelChange)="onYearChange()"
-      [nzSize]="'large'"
-      style="width: 120px;"
-    >
+    <nz-select id="yearSelect" [(ngModel)]="selectedYear" (ngModelChange)="onYearChange()" [nzSize]="'large'"
+      style="width: 120px;">
       <nz-option *ngFor="let year of availableYears" [nzValue]="year" [nzLabel]="year"></nz-option>
     </nz-select>
-      <span *ngIf="teams.length > 0 && !loading">
-  🔎 Resultados encontrados: <strong>{{ teams.length }}</strong>
-</span>
+    <span *ngIf="teams.length > 0 && !loading">
+      🔎 Resultados encontrados: <strong>{{ teams.length }}</strong>
+    </span>
   </div>
 
 
   <!-- Grid de equipos -->
   <ng-container *ngIf="!errorMessage">
-    <div
-      class="team-grid">
-      <nz-card
-        *ngFor="let team of paginatedTeams"
-        [nzTitle]="team.teamName"
-        class="team-card"
-        [nzBordered]="false"
-        [nzHoverable]="true"
-        (click)="selectTeam(team)"
-        (keydown.enter)="selectTeam(team)"
-        style="width: 100%; cursor: pointer;"
-        tabindex="0"
-      >
-        <p><strong>🇦🇺 Nacionalidad:</strong> {{ team.teamNationality }}</p>
-        <p><strong>🚦 Debut:</strong> {{ team.firstAppeareance }}</p>
-        <p><strong>🏆 Constructores:</strong> {{ team.constructorsChampionships ?? '0' }}</p>
-        <p><strong>🏁 Pilotos:</strong> {{ team.driversChampionships ?? '0' }}</p>
-        <a [href]="team.url" target="_blank" rel="noopener noreferrer">
-          🌐 Ver en Wikipedia
-        </a>
-      </nz-card>
+    <div class="team-grid">
+   <app-team-card *ngFor="let team of paginatedTeams; trackBy: trackByTeamId"
+  [team]="team"
+  (teamSelected)="selectTeam($event)"> </app-team-card>
+
     </div>
 
     <!-- Paginación -->
-    <nz-pagination
-      *ngIf="teams.length > itemsPerPage"
-      [nzTotal]="teams.length"
-      [nzPageSize]="itemsPerPage"
-      [(nzPageIndex)]="currentPage"
-      (nzPageIndexChange)="currentPage = $event"
-      [nzSize]="'small'"
-      [nzShowQuickJumper]="true"
-      style="margin-top: 24px;"
-    ></nz-pagination>
+    <nz-pagination *ngIf="teams.length > itemsPerPage" [nzTotal]="teams.length" [nzPageSize]="itemsPerPage"
+      [(nzPageIndex)]="currentPage" (nzPageIndexChange)="currentPage = $event" [nzSize]="'small'"
+      [nzShowQuickJumper]="true" style="margin-top: 24px;"></nz-pagination>
   </ng-container>
 
   <!-- Alerta -->
-  <nz-alert
-    *ngIf="!loading && errorMessage"
-    [nzType]="'info'"
-    [nzMessage]="errorMessage"
-    nzShowIcon
-    style="margin-top: 24px;"
-  ></nz-alert>
+  <nz-alert *ngIf="!loading && errorMessage" [nzType]="'info'" [nzMessage]="errorMessage" nzShowIcon
+    style="margin-top: 24px;"></nz-alert>
 
 </nz-spin>
 
-<br/>
+<br />
 <button nz-button nzType="link" (click)="goBack()" style="margin-bottom: 16px; cursor: pointer;">
   <span nz-icon nzType="arrow-left"></span> Volver
 </button>

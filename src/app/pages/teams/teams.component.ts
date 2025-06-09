@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -6,9 +6,14 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil, finalize } from 'rxjs/operators';
 
 import { F1ApiService } from '../../core/services/f1-api.service';
-import { Router } from '@angular/router';
+import { Team } from '../../core/models/models';
+import { generateYears } from '../../core/utils/generate-years';
+import { TeamCardComponent } from './team-card/team-card.component';
 
 @Component({
   selector: 'app-teams',
@@ -19,88 +24,89 @@ import { Router } from '@angular/router';
     NzSpinModule,
     NzCardModule,
     NzSelectModule,
-    NzSpinModule,
     NzAlertModule,
-    NzPaginationModule
+    NzPaginationModule,
+    TeamCardComponent
   ],
   templateUrl: './teams.component.html',
   styleUrls: ['./teams.component.scss']
 })
-export class TeamsComponent implements OnInit {
-  teams: any[] = [];
-  selectedTeam: any = null;
-  teamDrivers: any[] = [];
+export class TeamsComponent implements OnInit, OnDestroy {
+  teams: Team[] = [];
   loading = false;
-
   availableYears: number[] = [];
   selectedYear = 2025;
   errorMessage: string | null = null;
 
-  //services
+  currentPage = 1;
+  itemsPerPage = 6;
+
   private readonly f1Api = inject(F1ApiService);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
-
+  private readonly destroy$ = new Subject<void>(); private readonly teamHandlers = new Map<string, () => void>();
 
   ngOnInit(): void {
-    this.generateYears(1950, 2025);
+    this.availableYears = generateYears(1950, 2025);
     this.fetchTeams();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   onYearChange(): void {
-    this.selectedTeam = null;
-    this.teamDrivers = [];
+    this.errorMessage = null;
+    this.currentPage = 1;
     this.fetchTeams();
   }
 
   fetchTeams(): void {
     this.loading = true;
     this.errorMessage = null;
-    this.teams = [];
 
-    this.f1Api.getTeams(this.selectedYear).subscribe({
-      next: (teams) => {
-        this.teams = teams ?? [];
-        this.loading = false;
+    this.f1Api.getTeams(this.selectedYear)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.loading = false)
+      )
+      .subscribe({
+        next: (teams: Team[]) => {
+          this.teams = teams ?? [];
 
-        if (this.teams.length === 0) {
-          this.errorMessage = 'No se encontraron equipos para este año. Probá con otro.';
+          if (this.teams.length === 0) {
+            this.errorMessage = 'No se encontraron equipos para este año. Probá con otro.';
+          }
+        },
+        error: (err: any) => {
+          this.errorMessage = err?.status === 404
+            ? 'No se encontraron equipos para este año. Probá con otro.'
+            : 'Ocurrió un error al cargar los equipos.';
+          console.error('Error al cargar equipos:', err);
         }
-      },
-
-      error: (err: any) => {
-        this.loading = false;
-
-        if (err.status === 404) {
-          this.errorMessage = 'No se encontraron equipos para este año. Probá con otro.';
-        } else {
-          this.errorMessage = 'Ocurrió un error al cargar los equipos.';
-        }
-
-        console.error('Error al cargar equipos:', err);
-      }
-    });
+      });
   }
 
-  selectTeam(team: any): void {
+  selectTeam(team: Team): void {
     this.router.navigate(['/teams', team.teamId, 'drivers', this.selectedYear]);
-
   }
 
-  generateYears(start: number, end: number): void {
-    this.availableYears = Array.from({ length: end - start + 1 }, (_, i) => end - i);
+  onTeamCardSelect(team: Team): void {
+    this.selectTeam(team);
   }
 
   goBack(): void {
     this.location.back();
   }
 
-  //pagination
-  currentPage = 1;
-  itemsPerPage = 6;
+  trackByTeamId(_: number, team: Team): string {
+    return team.teamId;
+  }
 
-  get paginatedTeams(): any[] {
+  get paginatedTeams(): Team[] {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     return this.teams.slice(start, start + this.itemsPerPage);
   }
+
 }

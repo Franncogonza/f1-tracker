@@ -1,0 +1,29 @@
+:host {
+  display: block;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #fafafa;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+  }
+}
+
+.driver-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+a {
+  font-size: 14px;
+  color: #1890ff;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

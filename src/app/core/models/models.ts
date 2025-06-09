@@ -15,7 +15,12 @@ export interface Team {
   teamId: string;
   teamName: string;
   teamNationality: string;
+  firstAppeareance?: string;
+  constructorsChampionships?: number;
+  driversChampionships?: number;
+  url?: string;
 }
+
 
 export interface ChampionshipDriver {
   driver: Driver;

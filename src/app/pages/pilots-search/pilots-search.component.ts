@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +7,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { F1ApiService } from '../../core/services/f1-api.service';
 import { Driver, Team } from '../../core/models/models';
 import { GetFlagPipe } from '../../core/pipes/get-flag.pipe';
@@ -30,7 +31,7 @@ import { GetFlagPipe } from '../../core/pipes/get-flag.pipe';
     GetFlagPipe
   ]
 })
-export class PilotsSearchComponent implements OnInit {
+export class PilotsSearchComponent implements OnInit, OnDestroy {
   availableYears: number[] = [];
   selectedYear: number | null = 2025;
 
@@ -48,17 +49,23 @@ export class PilotsSearchComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
+  private readonly destroy$ = new Subject<void>();
 
   ngOnInit(): void {
     this.generateYears(1950, 2025);
     this.listenToSearch();
     this.loadTeamsForYear(this.selectedYear);
 
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.selectedYear = params['year'] ? +params['year'] : 2025;
       this.searchControl.setValue(params['q'] ?? '', { emitEvent: false });
       this.performSearch();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   generateYears(start: number, end: number): void {
@@ -66,76 +73,50 @@ export class PilotsSearchComponent implements OnInit {
   }
 
   listenToSearch(): void {
-    this.searchControl.valueChanges.pipe(debounceTime(400)).subscribe(() => {
-      this.updateQueryParams();
-      this.performSearch();
-    });
+    this.searchControl.valueChanges
+      .pipe(debounceTime(400), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.updateQueryParams();
+        this.performSearch();
+      });
   }
 
   updateQueryParams(): void {
-    const queryParams: any = {
-      year: this.selectedYear
-    };
-
-    if (this.searchControl.value?.trim()) {
-      queryParams.q = this.searchControl.value;
-    }
-
-    this.router.navigate([], {
-      queryParams,
-      queryParamsHandling: 'merge'
-    });
+    const queryParams: any = { year: this.selectedYear };
+    if (this.searchControl.value?.trim()) queryParams.q = this.searchControl.value;
+    this.router.navigate([], { queryParams, queryParamsHandling: 'merge' });
   }
 
   performSearch(): void {
     const query = this.searchControl.value?.trim().toLowerCase() || '';
     this.loading = true;
 
-    if (query.length >= 4) {
-      this.f1Api.searchDrivers(query).subscribe({
-        next: (res) => {
-const searchResults = res ?? [];
-
-          if (this.selectedYear) {
-            this.f1Api.getDrivers(this.selectedYear).subscribe({
-              next: (yearRes) => {
-                const yearDriverIds = new Set((yearRes ?? []).map((d: Driver) => d.driverId));
-                this.allDrivers = searchResults.filter((d: Driver) => yearDriverIds.has(d.driverId));
-                this.filteredDrivers = this.paginate(this.allDrivers);
-                this.loading = false;
-              },
-              error: () => this.handleError()
-            });
-          } else {
-            this.allDrivers = searchResults;
-            this.filteredDrivers = this.paginate(this.allDrivers);
-            this.loading = false;
-          }
+    this.getSearchObservable(query)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (drivers) => {
+          this.allDrivers = this.filterByYear(drivers);
+          this.filteredDrivers = this.paginate(this.allDrivers);
+          this.loading = false;
         },
         error: () => this.handleError()
       });
-   } else if (this.selectedYear) {
-    // Mostrar todos los pilotos del año
-    this.f1Api.getDrivers(this.selectedYear).subscribe({
-      next: (res) => {
-        this.allDrivers = res ?? [];
-        this.filteredDrivers = this.paginate(this.allDrivers);
-        this.loading = false;
-      },
-      error: () => this.handleError()
-    });
-  } else {
-    // Buscar todos los pilotos (sin filtro por año)
-    this.f1Api.getAllDrivers().subscribe({
-      next: (res) => {
-        this.allDrivers = res ?? [];
-        this.filteredDrivers = this.paginate(this.allDrivers);
-        this.loading = false;
-      },
-      error: () => this.handleError()
-    });
   }
-}
+
+  private getSearchObservable(query: string) {
+    if (query.length >= 4) {
+      return this.f1Api.searchDrivers(query);
+    } else if (this.selectedYear) {
+      return this.f1Api.getDrivers(this.selectedYear);
+    } else {
+      return this.f1Api.getAllDrivers();
+    }
+  }
+
+  private filterByYear(drivers: Driver[]): Driver[] {
+    if (!this.selectedYear) return drivers;
+    return drivers;
+  }
 
   private handleError(): void {
     this.allDrivers = [];
@@ -145,10 +126,8 @@ const searchResults = res ?? [];
 
   loadTeamsForYear(year: number | null): void {
     if (!year) return;
-
-    this.f1Api.getTeams(year).subscribe({
-      next: (res) => {
-        const teams = res ?? [];
+    this.f1Api.getTeams(year).pipe(takeUntil(this.destroy$)).subscribe({
+      next: (teams: Team[]) => {
         teams.forEach((team: Team) => {
           this.teamsMap.set(team.teamId, {
             name: team.teamName,
@@ -179,7 +158,7 @@ const searchResults = res ?? [];
     this.loadTeamsForYear(this.selectedYear);
   }
 
-   goBack(): void {
+  goBack(): void {
     this.location.back();
   }
 }

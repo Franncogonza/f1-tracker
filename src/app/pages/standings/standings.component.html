@@ -36,3 +36,19 @@
 <button nz-button nzType="link" (click)="goBack()" style="margin-bottom: 16px; cursor: pointer;">
   <span nz-icon nzType="arrow-left"></span> Volver
 </button>
+
+<nz-alert
+  *ngIf="driverError"
+  nzType="error"
+  nzMessage="Error al cargar el top 5 de pilotos"
+  nzShowIcon
+  style="margin-bottom: 16px;"
+></nz-alert>
+
+<nz-alert
+  *ngIf="constructorError"
+  nzType="error"
+  nzMessage="Error al cargar el top 5 de constructores"
+  nzShowIcon
+  style="margin-bottom: 16px;"
+></nz-alert>

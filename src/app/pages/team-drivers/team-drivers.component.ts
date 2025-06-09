@@ -6,7 +6,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { Subject, takeUntil } from 'rxjs';
 import { F1ApiService } from '../../core/services/f1-api.service';
 import { Driver } from '../../core/models/models';
-import { DriverCardComponent } from '../../shared/driver-card/driver-card.component';
+import { DriverCardComponent } from './driver-card/driver-card.component';
 
 @Component({
   selector: 'app-team-drivers',

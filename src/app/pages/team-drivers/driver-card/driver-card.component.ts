@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Driver } from '../../core/models/models';
-import { GetFlagPipe } from '../../core/pipes/get-flag.pipe';
+import { Driver } from '../../../core/models/models';
+import { GetFlagPipe } from '../../../core/pipes/get-flag.pipe';
 
 @Component({
   selector: 'app-driver-card',
