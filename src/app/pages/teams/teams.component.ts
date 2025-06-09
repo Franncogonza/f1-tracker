@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -39,6 +39,7 @@ export class TeamsComponent implements OnInit {
   //services
   private readonly f1Api = inject(F1ApiService);
   private readonly router = inject(Router);
+  private readonly location = inject(Location);
 
 
   ngOnInit(): void {
@@ -80,21 +81,25 @@ export class TeamsComponent implements OnInit {
     });
   }
 
-selectTeam(team: any): void {
-  this.router.navigate(['/teams', team.teamId, 'drivers', this.selectedYear]);
+  selectTeam(team: any): void {
+    this.router.navigate(['/teams', team.teamId, 'drivers', this.selectedYear]);
 
-}
+  }
 
   generateYears(start: number, end: number): void {
     this.availableYears = Array.from({ length: end - start + 1 }, (_, i) => end - i);
   }
 
-//pagination
-currentPage = 1;
-itemsPerPage = 6;
+  goBack(): void {
+    this.location.back();
+  }
 
-get paginatedTeams(): any[] {
-  const start = (this.currentPage - 1) * this.itemsPerPage;
-  return this.teams.slice(start, start + this.itemsPerPage);
-}
+  //pagination
+  currentPage = 1;
+  itemsPerPage = 6;
+
+  get paginatedTeams(): any[] {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return this.teams.slice(start, start + this.itemsPerPage);
+  }
 }

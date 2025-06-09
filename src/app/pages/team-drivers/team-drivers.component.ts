@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { F1ApiService } from '../../core/services/f1-api.service';
@@ -15,7 +15,7 @@ import { F1ApiService } from '../../core/services/f1-api.service';
 export class TeamDriversComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly f1Api = inject(F1ApiService);
-
+  private readonly location = inject(Location);
   teamId!: string;
   year!: number;
   teamName: string = '';
@@ -67,5 +67,9 @@ export class TeamDriversComponent implements OnInit {
   };
   return flags[nationality] || flags['default'];
 }
+
+   goBack(): void {
+    this.location.back();
+  }
 
 }

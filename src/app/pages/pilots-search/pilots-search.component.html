@@ -1,3 +1,4 @@
+
 <nz-spin [nzSpinning]="loading">
   <div style="margin-bottom: 16px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
     <label for="yearSelect">Año:</label>
@@ -34,3 +35,8 @@
   <nz-pagination *ngIf="allDrivers.length > itemsPerPage" [nzTotal]="allDrivers.length" [nzPageSize]="itemsPerPage"
     [(nzPageIndex)]="currentPage" (nzPageIndexChange)="onPageChange($event)" style="margin-top: 16px;"></nz-pagination>
 </nz-spin>
+
+<br/>
+<button nz-button nzType="link" (click)="goBack()" style="margin-bottom: 16px; cursor: pointer;">
+  <span nz-icon nzType="arrow-left"></span> Volver
+</button>

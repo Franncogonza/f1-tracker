@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -44,6 +44,7 @@ export class PilotsSearchComponent implements OnInit {
   private readonly f1Api = inject(F1ApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly location = inject(Location); 
 
   ngOnInit(): void {
     this.generateYears(1950, 2025);
@@ -205,5 +206,9 @@ export class PilotsSearchComponent implements OnInit {
     };
 
     return flags[country] || flags['default'];
+  }
+
+   goBack(): void {
+    this.location.back();
   }
 }

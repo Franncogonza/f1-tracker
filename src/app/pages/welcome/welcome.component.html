@@ -1,1 +1,41 @@
-<p>welcome works!</p>
+<section class="about-container">
+  <h1 class="title">
+    Sobre mí <span>👨‍💻</span>
+  </h1>
+
+  <div nz-row [nzGutter]="32" class="about-content">
+    <!-- Texto -->
+    <div nz-col [nzXs]="24" [nzLg]="12">
+      <p class="about-text">
+        Soy <strong>Franco Gonzalez</strong>, desarrollador
+        <strong class="highlight">Angular + Node.js + IA</strong>. Me apasiona
+        <em>automatizar, escalar sistemas</em> y construir productos con impacto real.
+      </p>
+      <p class="about-text">
+        +5 años creando soluciones digitales. Actualmente trabajando en
+        <strong>Riu Hotels</strong> desarrollando su motor de reservas global.
+      </p>
+      <p class="about-text">
+        Mi misión es clara:
+        <strong>crear tecnología que simplifique, potencie y transforme procesos.</strong>
+      </p>
+
+      <h2 class="skills-title">
+        Habilidades Técnicas <span>🛠️</span>
+      </h2>
+
+      <div class="skills-tags">
+        <nz-tag *ngFor="let skill of skills" [nzColor]="'blue'" class="skill-tag">{{ skill }}</nz-tag>
+      </div>
+    </div>
+
+    <!-- Imagen -->
+    <div nz-col [nzXs]="24" [nzLg]="12" class="image-wrapper">
+      <img
+        src="/assets/images/franco-link.png"
+        alt="Franco Gonzalez"
+        class="profile-img"
+      />
+    </div>
+  </div>
+</section>
