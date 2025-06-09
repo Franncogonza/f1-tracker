@@ -94,12 +94,12 @@ export class PilotsSearchComponent implements OnInit {
     if (query.length >= 4) {
       this.f1Api.searchDrivers(query).subscribe({
         next: (res) => {
-          const searchResults = res.drivers ?? [];
+const searchResults = res ?? [];
 
           if (this.selectedYear) {
             this.f1Api.getDrivers(this.selectedYear).subscribe({
               next: (yearRes) => {
-                const yearDriverIds = new Set((yearRes.drivers ?? []).map((d: Driver) => d.driverId));
+                const yearDriverIds = new Set((yearRes ?? []).map((d: Driver) => d.driverId));
                 this.allDrivers = searchResults.filter((d: Driver) => yearDriverIds.has(d.driverId));
                 this.filteredDrivers = this.paginate(this.allDrivers);
                 this.loading = false;
@@ -118,7 +118,7 @@ export class PilotsSearchComponent implements OnInit {
     // Mostrar todos los pilotos del año
     this.f1Api.getDrivers(this.selectedYear).subscribe({
       next: (res) => {
-        this.allDrivers = res.drivers ?? [];
+        this.allDrivers = res ?? [];
         this.filteredDrivers = this.paginate(this.allDrivers);
         this.loading = false;
       },
@@ -128,7 +128,7 @@ export class PilotsSearchComponent implements OnInit {
     // Buscar todos los pilotos (sin filtro por año)
     this.f1Api.getAllDrivers().subscribe({
       next: (res) => {
-        this.allDrivers = res.drivers ?? [];
+        this.allDrivers = res ?? [];
         this.filteredDrivers = this.paginate(this.allDrivers);
         this.loading = false;
       },
@@ -148,7 +148,7 @@ export class PilotsSearchComponent implements OnInit {
 
     this.f1Api.getTeams(year).subscribe({
       next: (res) => {
-        const teams = res.teams ?? [];
+        const teams = res ?? [];
         teams.forEach((team: Team) => {
           this.teamsMap.set(team.teamId, {
             name: team.teamName,

@@ -59,14 +59,15 @@ export class TeamsComponent implements OnInit {
     this.teams = [];
 
     this.f1Api.getTeams(this.selectedYear).subscribe({
-      next: (res: any) => {
-        this.teams = res.teams ?? [];
+      next: (teams) => {
+        this.teams = teams ?? [];
         this.loading = false;
 
         if (this.teams.length === 0) {
           this.errorMessage = 'No se encontraron equipos para este año. Probá con otro.';
         }
       },
+
       error: (err: any) => {
         this.loading = false;
 

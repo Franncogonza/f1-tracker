@@ -34,9 +34,8 @@ export class StandingsComponent implements OnInit {
 
   loadStandings(year: number): void {
     this.f1Api.getTopDriversByYear(year).subscribe({
-      next: (res: DriversChampionshipResponse) => {
-        const data = res.drivers_championship;
-        this.driverData = data.slice(0, 5).map((d: ChampionshipDriver) => ({
+      next: (drivers: ChampionshipDriver[]) => {
+        this.driverData = drivers.slice(0, 5).map((d) => ({
           name: `${d.driver.name} ${d.driver.surname}`,
           value: d.points,
         }));
@@ -48,8 +47,8 @@ export class StandingsComponent implements OnInit {
     });
 
     this.f1Api.getTopConstructorsByYear(year).subscribe({
-      next: (res: ConstructorsChampionshipResponse) => {
-        const data = res.constructors_championship;
+      next: (constructors: ChampionshipConstructor[]) => {
+        const data = constructors;
         this.constructorData = data.slice(0, 5).map((c: ChampionshipConstructor) => ({
           name: c.team.teamName,
           value: c.points,

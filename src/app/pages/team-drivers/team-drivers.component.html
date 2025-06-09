@@ -1,29 +1,29 @@
 <nz-spin [nzSpinning]="loading">
-  <div class="drivers-header">
+  <section class="drivers-header">
     <h3>Pilotos de {{ teamName | uppercase }} en {{ year }}</h3>
-  </div>
+  </section>
 
-  <div *ngIf="drivers.length > 0; else noDrivers" class="drivers-list">
-    <div *ngFor="let driver of drivers" class="driver-card">
-      <div class="driver-name">{{ driver.name }} {{ driver.surname }}</div>
-      <p><strong>Nacionalidad:</strong> {{ driver.nationality | getFlag }} {{ driver.nationality }}</p>
-      <p><strong>🎂 Nacimiento:</strong> {{ driver.birthday }}</p>
-      <p><strong>🚗 Número:</strong> {{ driver.number }}</p>
-      <a [href]="driver.url" target="_blank" rel="noopener noreferrer">🌐 Ver en Wikipedia</a>
+  <ng-container *ngIf="drivers.length > 0; else noDrivers">
+    <div class="drivers-list">
+      <app-driver-card
+        *ngFor="let driver of drivers"
+        [driver]="driver">
+      </app-driver-card>
     </div>
-  </div>
+  </ng-container>
 
   <ng-template #noDrivers>
     <nz-alert
       *ngIf="!loading"
-      [nzType]="'warning'"
-      [nzMessage]="'No se encontraron pilotos para este equipo en el año seleccionado.'"
-      nzShowIcon
-    ></nz-alert>
+      nzType="warning"
+      nzMessage="No se encontraron pilotos para este equipo en el año seleccionado."
+      nzShowIcon>
+    </nz-alert>
   </ng-template>
 </nz-spin>
 
-<br/>
-<button nz-button nzType="link" (click)="goBack()" style="margin-bottom: 16px; cursor: pointer;">
-  <span nz-icon nzType="arrow-left"></span> Volver
-</button>
+<div style="margin-top: 24px;">
+  <button nz-button nzType="link" (click)="goBack()" style="cursor: pointer;">
+    <span nz-icon nzType="arrow-left"></span> Volver
+  </button>
+</div>

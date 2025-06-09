@@ -33,22 +33,6 @@
     background-color: #f0f0f0;
     transform: translateY(-2px);
   }
-
-  .driver-name {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 8px;
-  }
-
-  a {
-    font-size: 14px;
-    color: #1890ff;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
 }
 
 nz-alert {
