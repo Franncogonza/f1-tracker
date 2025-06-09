@@ -7,44 +7,43 @@
     [nzTrigger]="null"
   >
     <div class="sidebar-logo">
-      <a href="https://ng.ant.design/" target="_blank">
-        <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
-        <h1>F1 Track</h1>
+      <a href="./" style="display: flex; align-items: center; gap: 8px;">
+        <img src="/assets/images/logo_formula.jpg" alt="logo" style="height: 32px;" />
+        <h1 style="color: white; margin: 0; font-size: 16px;">F1 Tracker</h1>
       </a>
     </div>
+
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/welcome">Welcome</a>
-          </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Monitor</a>
-          </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Workplace</a>
-          </li>
-        </ul>
+      <li nz-menu-item nzMatchRouter>
+        <span nz-icon nzType="home"></span>
+        <a routerLink="/welcome">Inicio</a>
       </li>
-      <li nz-submenu nzOpen nzTitle="Form" nzIcon="form">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a>Basic Form</a>
-          </li>
-        </ul>
+      <li nz-menu-item nzMatchRouter>
+        <span nz-icon nzType="team"></span>
+        <a routerLink="/dashboard">Equipos</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <span nz-icon nzType="search"></span>
+        <a routerLink="/pilots-search">Buscador</a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <span nz-icon nzType="bar-chart"></span>
+        <a routerLink="/standings">Ranking</a>
       </li>
     </ul>
   </nz-sider>
+
   <nz-layout>
     <nz-header>
-      <div class="app-header">
+      <div class="app-header" style="display: flex; align-items: center; height: 100%;">
         <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-          <nz-icon class="trigger" [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'" />
+          <nz-icon class="trigger" [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></nz-icon>
         </span>
       </div>
     </nz-header>
+
     <nz-content>
-      <div class="inner-content">
+      <div class="inner-content" style="padding: 24px;">
         <router-outlet></router-outlet>
       </div>
     </nz-content>
