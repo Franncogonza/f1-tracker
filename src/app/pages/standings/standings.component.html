@@ -1,1 +1,32 @@
-<p>standings works!</p>
+<h3>Top 5 Pilotos</h3>
+<ngx-charts-bar-horizontal
+  [view]="[400, 300]"
+  [results]="driverData"
+  [xAxis]="true"
+  [yAxis]="true"
+  [showXAxisLabel]="true"
+  [showYAxisLabel]="true"
+  xAxisLabel="Puntos"
+  yAxisLabel="Piloto"
+  [gradient]="false"
+  [showGridLines]="true"
+  [tooltipDisabled]="false"
+  [roundEdges]="true"
+>
+</ngx-charts-bar-horizontal>
+
+<h3 style="margin-top: 32px;">Top 5 Constructores</h3>
+<ngx-charts-bar-horizontal
+  [view]="[400, 300]"
+  [results]="constructorData"
+  [xAxis]="true"
+  [yAxis]="true"
+  [showXAxisLabel]="true"
+  [showYAxisLabel]="true"
+  xAxisLabel="Puntos"
+  yAxisLabel="Constructor"
+  [gradient]="false"
+  [showGridLines]="true"
+  [roundEdges]="true"
+>
+</ngx-charts-bar-horizontal>

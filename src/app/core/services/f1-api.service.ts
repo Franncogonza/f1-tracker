@@ -15,19 +15,19 @@ export class F1ApiService {
     return this.http.get(`${this.baseUrl}/${year}/drivers`);
   }
 
-  getDriversByTeam(year: number, teamId: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${year}/teams/${teamId}/drivers`);
+  getAllDrivers(limit = 1000, offset = 0): Observable<any> {
+    return this.http.get(`${this.baseUrl}/drivers?limit=${limit}&offset=${offset}`);
   }
 
   searchDrivers(query: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/drivers/search?q=${encodeURIComponent(query)}`);
   }
 
-  getDriverStandings(year: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${year}/drivers/standings`);
+  getTopDriversByYear(year: number): Observable<any> {
+    return this.http.get(`https://f1api.dev/api/${year}/drivers-championship`);
   }
 
-  getTeamStandings(year: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${year}/teams/standings`);
+  getTopConstructorsByYear(year: number): Observable<any> {
+    return this.http.get(`https://f1api.dev/api/${year}/constructors-championship`);
   }
 }

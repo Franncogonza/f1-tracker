@@ -1,1 +1,36 @@
-<p>pilots-search works!</p>
+<nz-spin [nzSpinning]="loading">
+  <div style="margin-bottom: 16px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+    <label for="yearSelect">Año:</label>
+    <nz-select id="yearSelect" [(ngModel)]="selectedYear" (ngModelChange)="onYearChange()"
+      [disabled]="(searchControl.value ?? '').trim().length >= 4" style="width: 120px;">
+      <nz-option [nzValue]="null" [nzLabel]="'Todos los años'"></nz-option>
+      <nz-option *ngFor="let year of availableYears" [nzValue]="year" [nzLabel]="year"></nz-option>
+
+    </nz-select>
+
+    <input nz-input placeholder="Buscar piloto (mín. 4 letras)" [formControl]="searchControl" style="width: 300px;" />
+  </div>
+
+  <div *ngIf="filteredDrivers.length > 0; else noResults" class="drivers-grid">
+    <nz-card *ngFor="let driver of filteredDrivers" [nzTitle]="driver.name + ' ' + driver.surname"
+      [nzExtra]="driver.shortName" class="driver-card">
+      <p><strong>Nacionalidad:</strong> {{ getFlag(driver.nationality) }} {{ driver.nationality }}</p>
+      <p *ngIf="driver.number"><strong>Número:</strong> {{ driver.number }}</p>
+      <p><strong>Fecha de nacimiento:</strong> {{ driver.birthday }}</p>
+      <p *ngIf="driver.teamId && teamsMap.get(driver.teamId)">
+        <strong>Escudería:</strong>
+        {{ getFlag(teamsMap.get(driver.teamId)?.nationality || '') }}
+        {{ teamsMap.get(driver.teamId)?.name }}
+      </p>
+
+      <a [href]="driver.url" target="_blank" rel="noopener noreferrer">Ver en Wikipedia</a>
+    </nz-card>
+  </div>
+
+  <ng-template #noResults>
+    <p>No se encontraron pilotos para los filtros aplicados.</p>
+  </ng-template>
+
+  <nz-pagination *ngIf="allDrivers.length > itemsPerPage" [nzTotal]="allDrivers.length" [nzPageSize]="itemsPerPage"
+    [(nzPageIndex)]="currentPage" (nzPageIndexChange)="onPageChange($event)" style="margin-top: 16px;"></nz-pagination>
+</nz-spin>

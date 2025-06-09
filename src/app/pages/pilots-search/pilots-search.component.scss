@@ -1,0 +1,19 @@
+.drivers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  padding: 0 16px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  justify-items: center;
+}
+
+.driver-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+

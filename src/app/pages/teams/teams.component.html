@@ -12,19 +12,16 @@
     >
       <nz-option *ngFor="let year of availableYears" [nzValue]="year" [nzLabel]="year"></nz-option>
     </nz-select>
+      <span *ngIf="teams.length > 0 && !loading">
+  🔎 Resultados encontrados: <strong>{{ teams.length }}</strong>
+</span>
   </div>
+
 
   <!-- Grid de equipos -->
   <ng-container *ngIf="!errorMessage">
     <div
-      class="team-grid"
-      style="
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 24px;
-        align-items: start;
-      "
-    >
+      class="team-grid">
       <nz-card
         *ngFor="let team of paginatedTeams"
         [nzTitle]="team.teamName"
