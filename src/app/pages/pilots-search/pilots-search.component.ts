@@ -9,6 +9,8 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { debounceTime } from 'rxjs/operators';
 import { F1ApiService } from '../../core/services/f1-api.service';
+import { Driver, Team } from '../../core/models/models';
+import { GetFlagPipe } from '../../core/pipes/get-flag.pipe';
 
 @Component({
   standalone: true,
@@ -24,7 +26,8 @@ import { F1ApiService } from '../../core/services/f1-api.service';
     NzSelectModule,
     NzInputModule,
     NzCardModule,
-    NzPaginationModule
+    NzPaginationModule,
+    GetFlagPipe
   ]
 })
 export class PilotsSearchComponent implements OnInit {
@@ -32,8 +35,8 @@ export class PilotsSearchComponent implements OnInit {
   selectedYear: number | null = 2025;
 
   searchControl = new FormControl('');
-  allDrivers: any[] = [];
-  filteredDrivers: any[] = [];
+  allDrivers: Driver[] = [];
+  filteredDrivers: Driver[] = [];
 
   currentPage = 1;
   itemsPerPage = 6;
@@ -44,7 +47,7 @@ export class PilotsSearchComponent implements OnInit {
   private readonly f1Api = inject(F1ApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly location = inject(Location); 
+  private readonly location = inject(Location);
 
   ngOnInit(): void {
     this.generateYears(1950, 2025);
@@ -53,7 +56,7 @@ export class PilotsSearchComponent implements OnInit {
 
     this.route.queryParams.subscribe((params) => {
       this.selectedYear = params['year'] ? +params['year'] : 2025;
-      this.searchControl.setValue(params['q'] || '', { emitEvent: false });
+      this.searchControl.setValue(params['q'] ?? '', { emitEvent: false });
       this.performSearch();
     });
   }
@@ -96,8 +99,8 @@ export class PilotsSearchComponent implements OnInit {
           if (this.selectedYear) {
             this.f1Api.getDrivers(this.selectedYear).subscribe({
               next: (yearRes) => {
-                const yearDriverIds = new Set((yearRes.drivers ?? []).map((d: any) => d.driverId));
-                this.allDrivers = searchResults.filter((d: any) => yearDriverIds.has(d.driverId));
+                const yearDriverIds = new Set((yearRes.drivers ?? []).map((d: Driver) => d.driverId));
+                this.allDrivers = searchResults.filter((d: Driver) => yearDriverIds.has(d.driverId));
                 this.filteredDrivers = this.paginate(this.allDrivers);
                 this.loading = false;
               },
@@ -146,7 +149,7 @@ export class PilotsSearchComponent implements OnInit {
     this.f1Api.getTeams(year).subscribe({
       next: (res) => {
         const teams = res.teams ?? [];
-        teams.forEach((team: any) => {
+        teams.forEach((team: Team) => {
           this.teamsMap.set(team.teamId, {
             name: team.teamName,
             nationality: team.teamNationality
@@ -159,7 +162,7 @@ export class PilotsSearchComponent implements OnInit {
     });
   }
 
-  paginate(data: any[]): any[] {
+  paginate(data: Driver[]): Driver[] {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     return data.slice(start, start + this.itemsPerPage);
   }
@@ -174,38 +177,6 @@ export class PilotsSearchComponent implements OnInit {
     this.updateQueryParams();
     this.performSearch();
     this.loadTeamsForYear(this.selectedYear);
-  }
-
-  getFlag(country: string): string {
-    const flags: { [key: string]: string } = {
-      'Argentine': '🇦🇷',
-      'Netherlands': '🇳🇱',
-      'Germany': '🇩🇪',
-      'Great Britain': '🇬🇧',
-      'British': '🇬🇧',
-      'Spain': '🇪🇸',
-      'France': '🇫🇷',
-      'Italy': '🇮🇹',
-      'Brazil': '🇧🇷',
-      'Brazilian': '🇧🇷',
-      'Australia': '🇦🇺',
-      'Australian': '🇦🇺',
-      'Polish': '🇵🇱',
-      'Japan': '🇯🇵',
-      'Japanese': '🇯🇵',
-      'Russian': '🇷🇺',
-      'Switzerland': '🇨🇭',
-      'Swiss': '🇨🇭',
-      'USA': '🇺🇸',
-      'United States': '🇺🇸',
-      'Finnish': '🇫🇮',
-      'Austrian': '🇦🇹',
-      'Indian': '🇮🇳',
-      'Spanish': '🇪🇸',
-      'default': '🏁'
-    };
-
-    return flags[country] || flags['default'];
   }
 
    goBack(): void {

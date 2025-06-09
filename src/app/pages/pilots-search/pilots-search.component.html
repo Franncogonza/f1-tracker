@@ -1,4 +1,3 @@
-
 <nz-spin [nzSpinning]="loading">
   <div style="margin-bottom: 16px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
     <label for="yearSelect">Año:</label>
@@ -15,14 +14,17 @@
   <div *ngIf="filteredDrivers.length > 0; else noResults" class="drivers-grid">
     <nz-card *ngFor="let driver of filteredDrivers" [nzTitle]="driver.name + ' ' + driver.surname"
       [nzExtra]="driver.shortName" class="driver-card">
-      <p><strong>Nacionalidad:</strong> {{ getFlag(driver.nationality) }} {{ driver.nationality }}</p>
+      <p><strong>Nacionalidad:</strong> {{ driver.nationality | getFlag }} {{ driver.nationality }}</p>
       <p *ngIf="driver.number"><strong>Número:</strong> {{ driver.number }}</p>
       <p><strong>Fecha de nacimiento:</strong> {{ driver.birthday }}</p>
-      <p *ngIf="driver.teamId && teamsMap.get(driver.teamId)">
-        <strong>Escudería:</strong>
-        {{ getFlag(teamsMap.get(driver.teamId)?.nationality || '') }}
-        {{ teamsMap.get(driver.teamId)?.name }}
-      </p>
+
+      <ng-container *ngIf="driver.teamId && teamsMap.get(driver.teamId) as team">
+        <p>
+          <strong>Escudería:</strong>
+          {{ team.nationality | getFlag }} {{ team.name }}
+        </p>
+      </ng-container>
+
 
       <a [href]="driver.url" target="_blank" rel="noopener noreferrer">Ver en Wikipedia</a>
     </nz-card>
@@ -36,7 +38,7 @@
     [(nzPageIndex)]="currentPage" (nzPageIndexChange)="onPageChange($event)" style="margin-top: 16px;"></nz-pagination>
 </nz-spin>
 
-<br/>
+<br />
 <button nz-button nzType="link" (click)="goBack()" style="margin-bottom: 16px; cursor: pointer;">
   <span nz-icon nzType="arrow-left"></span> Volver
 </button>

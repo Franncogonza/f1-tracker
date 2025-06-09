@@ -3,80 +3,62 @@ import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { debounceTime } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { F1ApiService } from '../../core/services/f1-api.service';
-import { debounceTime } from 'rxjs/internal/operators/debounceTime';
-import { Subject } from 'rxjs/internal/Subject';
+import { DriversChampionshipResponse, ChampionshipDriver, ConstructorsChampionshipResponse, ChampionshipConstructor } from '../../core/models/models';
 
 @Component({
   selector: 'app-standings',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    NzSelectModule,
-    NgxChartsModule
-  ],
+  imports: [CommonModule, FormsModule, NzSelectModule, NgxChartsModule],
   templateUrl: './standings.component.html',
-  styleUrls: ['./standings.component.scss']
+  styleUrls: ['./standings.component.scss'],
 })
 export class StandingsComponent implements OnInit {
-  selectedYear = 2025;
+  selectedYear: number = 2025;
   driverData: { name: string; value: number }[] = [];
-  private readonly yearChange$ = new Subject<number>();
-  private readonly location = inject(Location);
   constructorData: { name: string; value: number }[] = [];
 
+  private readonly yearChange$ = new Subject<number>();
+  private readonly location = inject(Location);
   private readonly f1Api = inject(F1ApiService);
 
   ngOnInit(): void {
-    this.yearChange$
-      .pipe(debounceTime(500))
-      .subscribe((year) => {
-        this.loadStandings(year);
-      });
+    this.yearChange$.pipe(debounceTime(500)).subscribe((year) => {
+      this.loadStandings(year);
+    });
 
-    // Llamada inicial
     this.yearChange$.next(this.selectedYear);
   }
 
-
   loadStandings(year: number): void {
     this.f1Api.getTopDriversByYear(year).subscribe({
-      next: (res: any) => {
-        const data = res?.drivers_championship;
-        if (Array.isArray(data)) {
-          this.driverData = data.slice(0, 5).map((d: any) => ({
-            name: `${d.driver.name} ${d.driver.surname}`,
-            value: +d.points
-          }));
-        } else {
-          console.warn('drivers_championship no es un array');
-          this.driverData = [];
-        }
+      next: (res: DriversChampionshipResponse) => {
+        const data = res.drivers_championship;
+        this.driverData = data.slice(0, 5).map((d: ChampionshipDriver) => ({
+          name: `${d.driver.name} ${d.driver.surname}`,
+          value: d.points,
+        }));
       },
       error: (err) => {
         console.error('Drivers error', err.status, err.message);
         this.driverData = [];
-      }
+      },
     });
 
     this.f1Api.getTopConstructorsByYear(year).subscribe({
-      next: (res: any) => {
-        const data = res?.constructors_championship;
-        if (Array.isArray(data)) {
-          this.constructorData = data.slice(0, 5).map((c: any) => ({
-            name: c.team.teamName,
-            value: +c.points
-          }));
-        } else {
-          console.warn('constructors_championship no es un array');
-          this.constructorData = [];
-        }
+      next: (res: ConstructorsChampionshipResponse) => {
+        const data = res.constructors_championship;
+        this.constructorData = data.slice(0, 5).map((c: ChampionshipConstructor) => ({
+          name: c.team.teamName,
+          value: c.points,
+        }));
       },
       error: (err) => {
         console.error('Constructors error', err.status, err.message);
         this.constructorData = [];
-      }
+      },
     });
   }
 
@@ -88,5 +70,4 @@ export class StandingsComponent implements OnInit {
   goBack(): void {
     this.location.back();
   }
-
 }
