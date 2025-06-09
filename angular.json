@@ -100,6 +100,40 @@
             ],
             "scripts": []
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/f1-tracker-server",
+            "main": "src/main.server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "sourceMap": false,
+              "optimization": true
+            },
+            "development": {
+              "sourceMap": true,
+              "optimization": false
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "f1-tracker:build:development",
+              "serverTarget": "f1-tracker:server:development"
+            },
+            "production": {
+              "browserTarget": "f1-tracker:build:production",
+              "serverTarget": "f1-tracker:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
         }
       }
     }
