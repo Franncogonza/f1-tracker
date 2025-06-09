@@ -1,54 +1,59 @@
-<nz-layout class="app-layout">
-  <nz-sider
-    class="menu-sidebar"
-    nzCollapsible
-    nzWidth="256px"
-    nzBreakpoint="md"
-    [(nzCollapsed)]="isCollapsed"
-    [nzTrigger]="null"
-  >
-    <div class="sidebar-logo">
-      <a href="./" style="display: flex; align-items: center; gap: 8px;">
+
+<nz-layout class="app-layout d-flex flex-column min-vh-100">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/welcome">
         <img src="/assets/images/logo_formula.jpg" alt="logo" loading="lazy" style="height: 32px;" />
-        <h1 style="color: white; margin: 0; font-size: 16px;">F1 Tracker</h1>
+        <span>F1 Tracker</span>
       </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+<ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex gap-4">
+
+  <li class="nav-item">
+    <a class="nav-link d-flex align-items-center gap-2" routerLink="/welcome" routerLinkActive="active">
+      <nz-icon nzType="home" nzTheme="fill"></nz-icon> Inicio
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link d-flex align-items-center gap-2" routerLink="/teams" routerLinkActive="active">
+      <nz-icon nzType="team" nzTheme="outline"></nz-icon> Equipos
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link d-flex align-items-center gap-2" routerLink="/pilots-search" routerLinkActive="active">
+      <nz-icon nzType="search" nzTheme="outline"></nz-icon> Buscador
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link d-flex align-items-center gap-2" routerLink="/standings" routerLinkActive="active">
+      <nz-icon nzType="bar-chart" nzTheme="outline"></nz-icon> Ranking
+    </a>
+  </li>
+
+</ul>
+
+
+
+      </div>
     </div>
+  </nav>
 
-    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-      <li nz-menu-item nzMatchRouter>
-        <span nz-icon nzType="home"></span>
-        <a routerLink="/welcome">Inicio</a>
-      </li>
-      <li nz-menu-item nzMatchRouter>
-        <span nz-icon nzType="team"></span>
-        <a routerLink="/teams">Equipos</a>
-      </li>
-      <li nz-menu-item nzMatchRouter>
-        <span nz-icon nzType="search"></span>
-        <a routerLink="/pilots-search">Buscador</a>
-      </li>
-      <li nz-menu-item nzMatchRouter>
-        <span nz-icon nzType="bar-chart"></span>
-        <a routerLink="/standings">Ranking</a>
-      </li>
-    </ul>
-  </nz-sider>
+  <nz-content>
+    <div class="inner-content" style="padding: 24px;">
+      <router-outlet></router-outlet>
+    </div>
+  </nz-content>
 
-  <nz-layout>
-    <nz-header>
-      <div class="app-header" style="display: flex; align-items: center; height: 100%;">
-        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-          <nz-icon class="trigger" [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></nz-icon>
-        </span>
-      </div>
-    </nz-header>
-
-    <nz-content>
-      <div class="inner-content" style="padding: 24px;">
-        <router-outlet></router-outlet>
-      </div>
-    </nz-content>
-
-    <app-footer />
+  <app-footer />
   </nz-layout>
-</nz-layout>

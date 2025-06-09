@@ -1,1 +1,50 @@
-/* You can add global styles to this file, and also import other style files */
+.nav-link {
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+  &.active,
+  &:hover {
+    color: #ff1e1e !important;
+    border-bottom: 2px solid #ff1e1e;
+  }
+}
+
+.navbar-nav {
+  gap: 1.5rem; // ~24px
+}
+
+.navbar .nav-link.active {
+  background-color: #ff1e1e !important;
+  color: white !important;
+  border-radius: 4px;
+  padding-left: 12px;
+  padding-right: 12px;
+
+  nz-icon {
+    color: white !important;
+  }
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+nz-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+nz-content {
+  flex: 1 0 auto;
+}
+
+app-footer {
+  flex-shrink: 0;
+  background-color: #111;
+  color: white;
+  padding: 8px;
+  text-align: center;
+}

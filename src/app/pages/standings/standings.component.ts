@@ -40,56 +40,55 @@ export class StandingsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-loadStandings(year: number): void {
-  this.driverError = false;
-  this.constructorError = false;
+  loadStandings(year: number): void {
+    this.driverError = false;
+    this.constructorError = false;
 
-  this.loadChartData<ChampionshipDriver>(
-    () => this.f1Api.getTopDriversByYear(year),
-    (drivers) => {
-      this.driverData = drivers.slice(0, 5).map(d => ({
-        name: `${d.driver.name} ${d.driver.surname}`,
-        value: d.points,
-      }));
-    },
-    () => {
-      this.driverError = true;
-      this.driverData = [];
-    },
-    'Drivers'
-  );
+    this.loadChartData<ChampionshipDriver>(
+      () => this.f1Api.getTopDriversByYear(year),
+      (drivers) => {
+        this.driverData = drivers.slice(0, 5).map(d => ({
+          name: `${d.driver.name} ${d.driver.surname}`,
+          value: d.points,
+        }));
+      },
+      () => {
+        this.driverError = true;
+        this.driverData = [];
+      },
+      'Drivers'
+    );
 
-  this.loadChartData<ChampionshipConstructor>(
-    () => this.f1Api.getTopConstructorsByYear(year),
-    (constructors) => {
-      this.constructorData = constructors.slice(0, 5).map(c => ({
-        name: c.team.teamName,
-        value: c.points,
-      }));
-    },
-    () => {
-      this.constructorError = true;
-      this.constructorData = [];
-    },
-    'Constructors'
-  );
-}
+    this.loadChartData<ChampionshipConstructor>(
+      () => this.f1Api.getTopConstructorsByYear(year),
+      (constructors) => {
+        this.constructorData = constructors.slice(0, 5).map(c => ({
+          name: c.team.teamName,
+          value: c.points,
+        }));
+      },
+      () => {
+        this.constructorError = true;
+        this.constructorData = [];
+      },
+      'Constructors'
+    );
+  }
 
-private loadChartData<T>(
-  requestFn: () => Observable<T[]>,
-  onSuccess: (data: T[]) => void,
-  onError: () => void,
-  label: string
-): void {
-  requestFn().subscribe({
-    next: (data) => onSuccess(data),
-    error: (err) => {
-      console.error(`${label} error`, err.status, err.message);
-      onError();
-    }
-  });
-}
-
+  private loadChartData<T>(
+    requestFn: () => Observable<T[]>,
+    onSuccess: (data: T[]) => void,
+    onError: () => void,
+    label: string
+  ): void {
+    requestFn().subscribe({
+      next: (data) => onSuccess(data),
+      error: (err) => {
+        console.error(`${label} error`, err.status, err.message);
+        onError();
+      }
+    });
+  }
 
   onYearChange(year: number): void {
     this.selectedYear = year;
