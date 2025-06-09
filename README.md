@@ -1,59 +1,70 @@
-# F1Tracker
+# 🏎️ F1 Tracker
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.14.
+Aplicación web desarrollada en **Angular v19.2.14** que permite visualizar información de la Fórmula 1: equipos, pilotos, rankings y buscador dinámico. Construida como parte de una evaluación técnica.
 
-## Development server
+## 📦 Requisitos
+- Node.js v18+
+- Angular CLI v16 o superior
+- Git
 
-To start a local development server, run:
+## 🚀 Instalación y ejecución
 
-```bash
-ng serve
-```
+1. **Clonar el repositorio**
+git clone https://github.com/Franncogonza/f1-tracker.git
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+**Abrir en consola**
+2. cd f1-tracker 
 
-## Code scaffolding
+3. **Instalar dependencias**
+npm install
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+4. **Levantar el servidor en modo desarrollo**
+npm run start
 
-```bash
-ng generate component component-name
-```
+5. **Abrir en el navegador**
+   - Navegar a `http://localhost:4200` para ver la aplicación en acción
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 📖 Descripción del proyecto
+🛠️ Stack tecnológico
+Angular 19.2.14 con arquitectura standalone y lazy loading
 
-```bash
-ng generate --help
-```
+NG-Zorro como librería de componentes UI
 
-## Building
+RxJS para programación reactiva
 
-To build the project run:
+API pública: https://f1api.dev
 
-```bash
-ng build
-```
+## 📊 Funcionalidades
+📅 Selección de año y visualización de equipos
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+🧑‍🚀 Visualización de pilotos por equipo
 
-## Running unit tests
+🔍 Buscador de pilotos por nombre y año (mínimo 4 caracteres)
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+📈 Gráficos de ranking (Top 5) de pilotos y constructores por año
 
-```bash
-ng test
-```
+🌐 Acceso directo a Wikipedia de cada piloto
 
-## Running end-to-end tests
+## 📂 Estructura del proyecto
+src/
+├── app/
+│   ├── core/              # Servicios, modelos y pipes reutilizables
+│   ├── pages/             # Componentes de páginas: teams, drivers, standings, etc.
+│   ├── shared/            # Componentes compartidos
+│   └── app.config.ts      # Configuración de rutas
+├── assets/
+└── index.html
 
-For end-to-end (e2e) testing, run:
 
-```bash
-ng e2e
-```
+## 📚 Documentación
+📌 Consideraciones técnicas
+El buscador filtra pilotos solo cuando se ingresan 4 o más caracteres.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Arquitectura preparada para SSR, aunque se ejecuta en modo client-side.
 
-## Additional Resources
+Manejo robusto de fechas inconsistentes de la API (dd/MM/yyyy y yyyy-MM-dd).
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 🛠️ Contribuciones
+👨‍💻 Autor
+Desarrollado por Franco David González
+🔗 GitHub - Franncogonza
