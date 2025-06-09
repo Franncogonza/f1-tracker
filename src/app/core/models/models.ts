@@ -4,12 +4,13 @@ export interface Driver {
   surname: string;
   shortName: string;
   nationality: string;
-  birthday: string;
   url: string;
   number?: number;
   teamId?: string;
   teamName?: string;
+  birthday?: string | Date | null;
 }
+
 
 export interface Team {
   teamId: string;

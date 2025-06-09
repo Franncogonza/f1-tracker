@@ -11,7 +11,7 @@ import { GetFlagPipe } from '../../../core/pipes/get-flag.pipe';
     <div class="driver-card">
       <div class="driver-name">{{ driver.name }} {{ driver.surname }}</div>
       <p><strong>Nacionalidad:</strong> {{ driver.nationality | getFlag }} {{ driver.nationality }}</p>
-      <p><strong>🎂 Nacimiento:</strong> {{ driver.birthday }}</p>
+      <p><strong>🎂 Nacimiento:</strong> {{ driver.birthday | date:'dd/MM/yyyy' }}
       <p *ngIf="driver.number"><strong>🚗 Número:</strong> {{ driver.number }}</p>
       <a [href]="driver.url" target="_blank" rel="noopener noreferrer">🌐 Ver en Wikipedia</a>
     </div>

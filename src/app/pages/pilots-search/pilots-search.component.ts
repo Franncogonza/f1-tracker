@@ -81,11 +81,21 @@ export class PilotsSearchComponent implements OnInit, OnDestroy {
       });
   }
 
-  updateQueryParams(): void {
-    const queryParams: any = { year: this.selectedYear };
-    if (this.searchControl.value?.trim()) queryParams.q = this.searchControl.value;
-    this.router.navigate([], { queryParams, queryParamsHandling: 'merge' });
+   updateQueryParams(): void {
+  const queryParams: any = { year: this.selectedYear };
+
+  const query = (this.searchControl.value ?? '').trim();
+  if (query) {
+    queryParams.q = query;
+  } else {
+    queryParams.q = null;
   }
+
+  this.router.navigate([], {
+    queryParams,
+    queryParamsHandling: 'merge'
+  });
+}
 
   performSearch(): void {
     const query = this.searchControl.value?.trim().toLowerCase() || '';

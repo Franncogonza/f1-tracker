@@ -16,7 +16,7 @@
       [nzExtra]="driver.shortName" class="driver-card">
       <p><strong>Nacionalidad:</strong> {{ driver.nationality | getFlag }} {{ driver.nationality }}</p>
       <p *ngIf="driver.number"><strong>Número:</strong> {{ driver.number }}</p>
-      <p><strong>Fecha de nacimiento:</strong> {{ driver.birthday }}</p>
+      <p><strong>Fecha de nacimiento:</strong> {{ driver.birthday | date:'dd/MM/yyyy' }}</p>
 
       <ng-container *ngIf="driver.teamId && teamsMap.get(driver.teamId) as team">
         <p>
