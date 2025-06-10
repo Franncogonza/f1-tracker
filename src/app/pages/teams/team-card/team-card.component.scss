@@ -1,51 +1,90 @@
+// team-card.component.scss
 :host {
   display: block;
 }
 
 .team-card {
   margin-block: 1rem;
-  border-radius: .5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+  border-radius: .75rem;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-  ::ng-deep .ant-card-head {
-    position: relative;
-    padding: .75rem 1rem;
-    overflow: hidden;
+  /* Body blanco premium */
+  background: #F5F5F7;
+
+  /* Efecto hover: elevación */
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   }
 
+  /* Feedback táctil */
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Header con fibra de carbono atenuada */
+::ng-deep .ant-card-head {
+  position: relative;
+  padding: .7rem 1rem;
+  background: linear-gradient(
+    45deg,
+    rgba(10, 10, 10, 0.85) 25%,
+    rgba(20, 20, 20, 0.85) 25%,
+    rgba(20, 20, 20, 0.85) 50%,
+    rgba(10, 10, 10, 0.85) 50%,
+    rgba(10, 10, 10, 0.85) 75%,
+    rgba(20, 20, 20, 0.85) 75%,
+    rgba(20, 20, 20, 0.85) 100%
+  );
+  background-size: 16px 16px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05); // más sutil
+  transition: background 0.3s ease;
+}
+
+  /* Título cromado suave + wrapping */
   ::ng-deep .ant-card-head-title {
-    position: relative;
-    display: inline-block;
     font-size: 1.4rem;
-    font-weight: 800;
+    font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: .5px;
+    line-height: 1.2;
+    white-space: normal;
+    word-break: break-word;
 
-    /* Gradient grafito → plata */
-    background: linear-gradient(90deg, #2e2e2e 0%, #7d7d7d 50%, #c0c0c0 100%);
+    /* Cromado animado */
+    background: linear-gradient(120deg, #e0e0e0 0%, #ffffff 30%, #d0d0d0 60%, #ffffff 100%);
     background-size: 200% auto;
-    animation: shine 4s ease-in-out infinite;
-
-    /* Clip al texto */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-
-    /* Sombra suave */
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    animation: soft-shine 6s ease-in-out infinite;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   }
 
-  /* Línea degradada bajo el título */
+  /* Sublínea metálica bajo título */
   ::ng-deep .ant-card-head-title::after {
     content: '';
     position: absolute;
     left: 0;
-    bottom: -4px;
+    bottom: -2px;
     width: 100%;
     height: 3px;
-    background: linear-gradient(90deg, transparent, #7d7d7d, transparent);
+    background: linear-gradient(90deg, #ccc 0%, #fff 50%, #ccc 100%);
   }
 
-  @keyframes shine {
-    to { background-position: -200% center; }
+  @keyframes soft-shine {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: -100% center; }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    ::ng-deep .ant-card-head {
+      padding: .5rem .8rem;
+    }
+    ::ng-deep .ant-card-head-title {
+      font-size: 1.2rem;
+    }
   }
 }
