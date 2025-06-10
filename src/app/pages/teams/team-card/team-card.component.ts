@@ -10,6 +10,7 @@ import { GetFlagPipe } from '../../../core/pipes/get-flag.pipe';
   imports: [CommonModule, NzCardModule, GetFlagPipe],
   template: `
     <nz-card
+      class="team-card"
       [nzTitle]="team.teamName"
       class="team-card"
       [nzBordered]="false"
