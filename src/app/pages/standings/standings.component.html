@@ -74,7 +74,11 @@
     </div>
   </div>
 
-  <button nz-button (click)="goBack()" class="back-button">
-    <span nz-icon nzType="arrow-left"></span> Volver
-  </button>
+<app-button
+  buttonText="Volver"
+  nzType="default"
+  nzIcon="arrow-left"
+  (buttonClick)="goBack()"
+  class="back-button">
+</app-button>
 </div>

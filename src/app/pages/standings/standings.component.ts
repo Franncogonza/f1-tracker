@@ -10,6 +10,7 @@ import { ChampionshipDriver, ChampionshipConstructor } from '../../core/models/m
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { generateYears } from '../../core/utils/generate-years';
+import { AppButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-standings',
@@ -20,7 +21,8 @@ import { generateYears } from '../../core/utils/generate-years';
     NzSelectModule,
     NgxChartsModule,
     NzSpinModule,
-    NzEmptyModule
+    NzEmptyModule,
+    AppButtonComponent
   ],
   templateUrl: './standings.component.html',
   styleUrls: ['./standings.component.scss']

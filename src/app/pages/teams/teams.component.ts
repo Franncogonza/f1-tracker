@@ -18,6 +18,7 @@ import { F1ApiService } from '../../core/services/f1-api.service';
 import { Team } from '../../core/models/models';
 import { generateYears } from '../../core/utils/generate-years';
 import { TeamCardComponent } from './team-card/team-card.component';
+import { AppButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-teams',
@@ -31,7 +32,8 @@ import { TeamCardComponent } from './team-card/team-card.component';
     NzAlertModule,
     NzPaginationModule,
     NzEmptyModule,
-    TeamCardComponent
+    TeamCardComponent,
+    AppButtonComponent
   ],
   templateUrl: './teams.component.html',
   styleUrls: ['./teams.component.scss']

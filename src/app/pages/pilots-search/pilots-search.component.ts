@@ -16,6 +16,7 @@ import { F1ApiService } from '../../core/services/f1-api.service';
 import { Driver, Team } from '../../core/models/models';
 import { GetFlagPipe } from '../../core/pipes/get-flag.pipe';
 import { generateYears } from '../../core/utils/generate-years';
+import { AppButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   standalone: true,
@@ -33,7 +34,8 @@ import { generateYears } from '../../core/utils/generate-years';
     NzCardModule,
     NzPaginationModule,
     NzEmptyModule,
-    GetFlagPipe
+    GetFlagPipe,
+    AppButtonComponent
   ]
 })
 export class PilotsSearchComponent implements OnInit, OnDestroy {

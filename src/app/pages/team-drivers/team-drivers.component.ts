@@ -7,11 +7,12 @@ import { Subject, takeUntil } from 'rxjs';
 import { F1ApiService } from '../../core/services/f1-api.service';
 import { Driver } from '../../core/models/models';
 import { DriverCardComponent } from './driver-card/driver-card.component';
+import { AppButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-team-drivers',
   standalone: true,
-  imports: [CommonModule, NzSpinModule, NzAlertModule, DriverCardComponent],
+  imports: [CommonModule, NzSpinModule, NzAlertModule, DriverCardComponent, AppButtonComponent],
   templateUrl: './team-drivers.component.html',
   styleUrls: ['./team-drivers.component.scss'],
 })

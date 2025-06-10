@@ -45,5 +45,10 @@
     ></nz-pagination>
   </div>
 
-  <button nz-button (click)="goBack()" class="back-button">Volver</button>
-</div>
+<app-button
+  buttonText="Volver"
+  nzType="default"
+  nzIcon="arrow-left"
+  (buttonClick)="goBack()"
+  class="back-button">
+</app-button></div>

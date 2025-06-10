@@ -22,8 +22,10 @@
   </ng-template>
 </nz-spin>
 
-<div style="margin-top: 24px;">
-  <button nz-button nzType="link" (click)="goBack()" style="cursor: pointer;">
-    <span nz-icon nzType="arrow-left"></span> Volver
-  </button>
-</div>
+<app-button
+  buttonText="Volver"
+  nzType="default"
+  nzIcon="arrow-left"
+  (buttonClick)="goBack()"
+  class="back-button">
+</app-button>
