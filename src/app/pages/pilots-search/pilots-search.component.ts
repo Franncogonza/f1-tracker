@@ -98,7 +98,7 @@ export class PilotsSearchComponent implements OnInit, OnDestroy {
 }
 
   performSearch(): void {
-    const query = this.searchControl.value?.trim().toLowerCase() || '';
+    const query = this.searchControl.value?.trim().toLowerCase() ?? '';
     this.loading = true;
 
     this.getSearchObservable(query)
