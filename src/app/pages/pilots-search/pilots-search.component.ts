@@ -111,7 +111,6 @@ export class PilotsSearchComponent implements OnInit, OnDestroy {
     });
   }
 
-
   generateYears(start: number, end: number): void {
     this.availableYears = generateYears(start, end);
   }

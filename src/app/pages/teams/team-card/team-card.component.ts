@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { Team } from '../../../core/models/models';
+import { GetFlagPipe } from '../../../core/pipes/get-flag.pipe';
 
 @Component({
   selector: 'app-team-card',
   standalone: true,
-  imports: [CommonModule, NzCardModule],
+  imports: [CommonModule, NzCardModule, GetFlagPipe],
   template: `
     <nz-card
       [nzTitle]="team.teamName"
@@ -18,7 +19,7 @@ import { Team } from '../../../core/models/models';
       style="width: 100%; cursor: pointer;"
       tabindex="0"
     >
-      <p><strong>🇦🇺 Nacionalidad:</strong> {{ team.teamNationality }}</p>
+      <p><strong>Origen:</strong> {{ team.teamNationality | getFlag }}</p>
       <p><strong>🚦 Debut:</strong> {{ team.firstAppeareance }}</p>
       <p><strong>🏆 Constructores:</strong> {{ team.constructorsChampionships ?? '0' }}</p>
       <p><strong>🏁 Pilotos:</strong> {{ team.driversChampionships ?? '0' }}</p>

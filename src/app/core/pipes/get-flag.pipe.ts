@@ -10,6 +10,7 @@ export class GetFlagPipe implements PipeTransform {
     'Argentine': '🇦🇷',
     'Argentina': '🇦🇷',
     'Austrian': '🇦🇹',
+    'Austria': '🇦🇹',
     'Australian': '🇦🇺',
     'Australia': '🇦🇺',
     'Brazil': '🇧🇷',
@@ -42,10 +43,12 @@ export class GetFlagPipe implements PipeTransform {
     'Thailand': '🇹🇭',
     'United States': '🇺🇸',
     'USA': '🇺🇸',
-    'default': '🏁'
+    'default': ''
   };
 
-  transform(nationality: string): string {
-    return this.flags[nationality] || this.flags['default'];
+transform(nationality: string): string {
+    const flag = this.flags[nationality] || this.flags['default'];
+    return `${flag} ${nationality}`;
   }
 }
+
