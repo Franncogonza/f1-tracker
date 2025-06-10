@@ -17,10 +17,8 @@ export class F1ApiService {
   }
 
   private mapTeams(teams: Team[]): Team[] {
-    // Si algún día Team tiene fecha, parseala acá
     return teams.map(team => ({
       ...team,
-      // foundationDate: this.parseDate(team.foundationDate) // ejemplo si existiera
     }));
   }
 
