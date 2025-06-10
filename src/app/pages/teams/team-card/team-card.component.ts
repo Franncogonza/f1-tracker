@@ -31,10 +31,10 @@ import { Team } from '../../../core/models/models';
 })
 export class TeamCardComponent {
   @Input() team!: Team;
-  @Output() teamSelected = new EventEmitter<Team>();
+  @Output() selectTeam = new EventEmitter<Team>();
 
   onCardClick(): void {
-    this.teamSelected.emit(this.team);
+    this.selectTeam.emit(this.team);
   }
 }
 

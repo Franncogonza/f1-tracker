@@ -7,28 +7,59 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import { F1ApiService } from '../../core/services/f1-api.service';
 import { ChampionshipDriver, ChampionshipConstructor } from '../../core/models/models';
-import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { generateYears } from '../../core/utils/generate-years';
 
 @Component({
   selector: 'app-standings',
   standalone: true,
-  imports: [CommonModule, FormsModule, NzSelectModule, NgxChartsModule, NzAlertModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NzSelectModule,
+    NgxChartsModule,
+    NzSpinModule,
+    NzEmptyModule
+  ],
   templateUrl: './standings.component.html',
   styleUrls: ['./standings.component.scss']
 })
 export class StandingsComponent implements OnInit, OnDestroy {
-  selectedYear: number = 2025;
-  driverData: { name: string; value: number }[] = [];
-  constructorData: { name: string; value: number }[] = [];
-  driverError = false;
-  constructorError = false;
-
   private readonly yearChange$ = new Subject<number>();
   private readonly location = inject(Location);
   private readonly f1Api = inject(F1ApiService);
   private readonly destroy$ = new Subject<void>();
 
+  selectedYear: number = new Date().getFullYear();
+  driverData: { name: string; value: number }[] = [];
+  constructorData: { name: string; value: number }[] = [];
+
+  availableYears: number[] = [];
+
+  isLoadingDriversChart$: Observable<boolean> = this.f1Api.isLoadingChampionshipDrivers$;
+  isLoadingConstructorsChart$: Observable<boolean> = this.f1Api.isLoadingChampionshipConstructors$;
+
+  chartView: [number, number] = [700, 250];
+  showXAxis = true;
+  showYAxis = true;
+  showXAxisLabel = true;
+  showYAxisLabel = true;
+  gradient = false;
+  showGridLines = true;
+  roundEdges = true;
+  xAxisLabelPoints = 'Puntos';
+  yAxisLabelDriver = 'Piloto';
+  yAxisLabelConstructor = 'Constructor';
+
   ngOnInit(): void {
+    const currentYear = new Date().getFullYear();
+    const startYear = 1950;
+    const endYear = currentYear;
+
+    this.availableYears = generateYears(startYear, endYear);
+    this.availableYears.sort((a, b) => b - a);
+
     this.yearChange$
       .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe((year) => this.loadStandings(year));
@@ -41,53 +72,34 @@ export class StandingsComponent implements OnInit, OnDestroy {
   }
 
   loadStandings(year: number): void {
-    this.driverError = false;
-    this.constructorError = false;
-
-    this.loadChartData<ChampionshipDriver>(
-      () => this.f1Api.getTopDriversByYear(year),
-      (drivers) => {
-        this.driverData = drivers.slice(0, 5).map(d => ({
-          name: `${d.driver.name} ${d.driver.surname}`,
-          value: d.points,
-        }));
-      },
-      () => {
-        this.driverError = true;
-        this.driverData = [];
-      },
-      'Drivers'
-    );
-
-    this.loadChartData<ChampionshipConstructor>(
-      () => this.f1Api.getTopConstructorsByYear(year),
-      (constructors) => {
-        this.constructorData = constructors.slice(0, 5).map(c => ({
-          name: c.team.teamName,
-          value: c.points,
-        }));
-      },
-      () => {
-        this.constructorError = true;
-        this.constructorData = [];
-      },
-      'Constructors'
-    );
+    this.loadDriverStandings(year);
+    this.loadConstructorStandings(year);
   }
 
-  private loadChartData<T>(
-    requestFn: () => Observable<T[]>,
-    onSuccess: (data: T[]) => void,
-    onError: () => void,
-    label: string
-  ): void {
-    requestFn().subscribe({
-      next: (data) => onSuccess(data),
-      error: (err) => {
-        console.error(`${label} error`, err.status, err.message);
-        onError();
-      }
-    });
+  private loadDriverStandings(year: number): void {
+    this.f1Api.getTopDriversByYear(year)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (drivers: ChampionshipDriver[]) => {
+          this.driverData = drivers.slice(0, 5).map(d => ({
+            name: `${d.driver.name} ${d.driver.surname}`,
+            value: d.points,
+          }));
+        },
+      });
+  }
+
+  private loadConstructorStandings(year: number): void {
+    this.f1Api.getTopConstructorsByYear(year)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (constructors: ChampionshipConstructor[]) => {
+          this.constructorData = constructors.slice(0, 5).map(c => ({
+            name: c.team.teamName,
+            value: c.points,
+          }));
+        },
+      });
   }
 
   onYearChange(year: number): void {

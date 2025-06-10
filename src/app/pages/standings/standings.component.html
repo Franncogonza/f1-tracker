@@ -1,54 +1,80 @@
-<h3>Top 5 Pilotos</h3>
-<ngx-charts-bar-horizontal
-  [view]="[350, 250]"
-  [results]="driverData"
-  [xAxis]="true"
-  [yAxis]="true"
-  [showXAxisLabel]="true"
-  [showYAxisLabel]="true"
-  xAxisLabel="Puntos"
-  yAxisLabel="Piloto"
-  [gradient]="false"
-  [showGridLines]="true"
-  [tooltipDisabled]="false"
-  [roundEdges]="true"
->
-</ngx-charts-bar-horizontal>
+<div class="standings-page-container">
+  <div class="header-section">
+    <h1>Clasificaciones F1 - {{ selectedYear }}</h1>
+    <nz-select
+      class="year-select"
+      [(ngModel)]="selectedYear"
+      (ngModelChange)="onYearChange($event)"
+      nzPlaceHolder="Selecciona un año"
+      nzShowSearch
+      style="width: 150px;"
+    >
+      <nz-option *ngFor="let year of availableYears" [nzValue]="year" [nzLabel]="year"></nz-option>
+    </nz-select>
+  </div>
 
-<h3 style="margin-top: 32px;">Top 5 Constructores</h3>
-<ngx-charts-bar-horizontal
-  [view]="[350, 250]"
-  [results]="constructorData"
-  [xAxis]="true"
-  [yAxis]="true"
-  [showXAxisLabel]="true"
-  [showYAxisLabel]="true"
-  xAxisLabel="Puntos"
-  yAxisLabel="Constructor"
-  [gradient]="false"
-  [showGridLines]="true"
-  [roundEdges]="true"
->
-</ngx-charts-bar-horizontal>
+  <div class="charts-container">
+    <div class="chart-block">
+      <h3>Top 5 Pilotos</h3>
+      <div *ngIf="isLoadingDriversChart$ | async" class="chart-loading-state">
+        <nz-spin nzSimple nzSize="large"></nz-spin>
+        <p>Cargando datos de pilotos...</p>
+      </div>
+      <ng-container *ngIf="(isLoadingDriversChart$ | async) === false">
+        <div *ngIf="driverData.length > 0; else noDriverDataBlock">
+          <ngx-charts-bar-horizontal
+            [view]="chartView"
+            [results]="driverData"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            xAxisLabel="{{ xAxisLabelPoints }}"
+            yAxisLabel="{{ yAxisLabelDriver }}"
+            [gradient]="gradient"
+            [showGridLines]="showGridLines"
+            [tooltipDisabled]="false"
+            [roundEdges]="roundEdges"
+          >
+          </ngx-charts-bar-horizontal>
+        </div>
+        <ng-template #noDriverDataBlock>
+          <nz-empty nzNotFoundImage="simple" nzNotFoundContent="No hay datos de pilotos disponibles para este año."></nz-empty>
+        </ng-template>
+      </ng-container>
+    </div>
 
-<br/><br/>
-<br/>
-<button nz-button nzType="link" (click)="goBack()" style="margin-bottom: 16px; cursor: pointer;">
-  <span nz-icon nzType="arrow-left"></span> Volver
-</button>
+    <div class="chart-block">
+      <h3 style="margin-top: 32px;">Top 5 Constructores</h3>
+      <div *ngIf="isLoadingConstructorsChart$ | async" class="chart-loading-state">
+        <nz-spin nzSimple nzSize="large"></nz-spin>
+        <p>Cargando datos de constructores...</p>
+      </div>
+      <ng-container *ngIf="(isLoadingConstructorsChart$ | async) === false">
+        <div *ngIf="constructorData.length > 0; else noConstructorDataBlock">
+          <ngx-charts-bar-horizontal
+            [view]="chartView"
+            [results]="constructorData"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            xAxisLabel="{{ xAxisLabelPoints }}"
+            yAxisLabel="{{ yAxisLabelConstructor }}"
+            [gradient]="gradient"
+            [showGridLines]="showGridLines"
+            [roundEdges]="roundEdges"
+          >
+          </ngx-charts-bar-horizontal>
+        </div>
+        <ng-template #noConstructorDataBlock>
+          <nz-empty nzNotFoundImage="simple" nzNotFoundContent="No hay datos de constructores disponibles para este año."></nz-empty>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
 
-<nz-alert
-  *ngIf="driverError"
-  nzType="error"
-  nzMessage="Error al cargar el top 5 de pilotos"
-  nzShowIcon
-  style="margin-bottom: 16px;"
-></nz-alert>
-
-<nz-alert
-  *ngIf="constructorError"
-  nzType="error"
-  nzMessage="Error al cargar el top 5 de constructores"
-  nzShowIcon
-  style="margin-bottom: 16px;"
-></nz-alert>
+  <button nz-button (click)="goBack()" class="back-button">
+    <span nz-icon nzType="arrow-left"></span> Volver
+  </button>
+</div>
