@@ -9,22 +9,6 @@ export class F1ApiService {
   private readonly baseUrl = 'https://f1api.dev/api';
   private readonly http = inject(HttpClient);
 
-  // --- Utilidad interna ---
-  private parseDate(value: any): Date | null {
-    if (!value) return null;
-    if (value instanceof Date) return value;
-    if (typeof value === 'string') {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return new Date(value);
-      if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
-        const [dd, mm, yyyy] = value.split('/');
-        return new Date(Number(yyyy), Number(mm) - 1, Number(dd));
-      }
-      const parsed = new Date(value);
-      return isNaN(parsed.getTime()) ? null : parsed;
-    }
-    return null;
-  }
-
   private mapDrivers(drivers: Driver[]): Driver[] {
     return drivers.map(driver => ({
       ...driver,
@@ -92,4 +76,21 @@ export class F1ApiService {
     console.error(errorMessage);
     return throwError(() => new Error(errorMessage));
   }
+
+    // --- Utilidad interna ---
+  private parseDate(value: any): Date | null {
+    if (!value) return null;
+    if (value instanceof Date) return value;
+    if (typeof value === 'string') {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return new Date(value);
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+        const [dd, mm, yyyy] = value.split('/');
+        return new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+      }
+      const parsed = new Date(value);
+      return isNaN(parsed.getTime()) ? null : parsed;
+    }
+    return null;
+  }
+
 }
