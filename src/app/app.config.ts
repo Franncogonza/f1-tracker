@@ -11,7 +11,7 @@ import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
-import { ErrorHandlingInterceptor } from './core/interceptors/error-handling.service';
+import { ErrorHandlingInterceptor } from './core/interceptors/error-handling.interceptor';
 
 registerLocaleData(en);
 
