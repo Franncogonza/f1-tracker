@@ -6,7 +6,8 @@ import {
   HomeOutline,
   HomeFill,
   TeamOutline,
-  BarChartOutline
+  BarChartOutline,
+  ArrowLeftOutline,
 } from '@ant-design/icons-angular/icons';
 
 export const icons = [
@@ -17,5 +18,6 @@ export const icons = [
   HomeOutline,
   HomeFill,
   TeamOutline,
-  BarChartOutline
+  BarChartOutline,
+  ArrowLeftOutline
 ];

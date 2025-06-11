@@ -43,7 +43,7 @@
 }
 
   /* Título cromado suave + wrapping */
- ::ng-deep .ant-card-head-title {
+::ng-deep .ant-card-head-title {
   position: relative;
   font-size: 1.4rem;
   font-weight: 800;
@@ -53,13 +53,8 @@
   white-space: normal;
   word-break: break-word;
 
-  // Efecto "acero bruñido" con brillos oscuros
-  background: linear-gradient(120deg, #aaa 0%, #ddd 40%, #888 70%, #ccc 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: soft-shine 8s ease-in-out infinite;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); // más profundo y sobrio
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); // profundidad sutil
 }
 
   /* Sublínea metálica bajo título */
